@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Authorize Payment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: -apple-system, sans-serif; text-align: center; padding: 40px; line-height: 1.5; }
+        .card { border: 1px solid #eee; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        button { background: #007bff; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; cursor: pointer; }
+        button:active { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Confirm Payment</h2>
+        <p>You are paying <strong>$1.00</strong> to the demo store.</p>
+      <a href="https://google.com"></a>
+        <button onclick="sendConfirm()">Authorize Now</button>
+    </div>
+
+    <script>
+        function sendConfirm() {
+            if (navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage('confirm-payment');
+            } else {
+                alert("Error: Service Worker not found.");
+            }
+        }
+    </script>
+</body>
+</html>
