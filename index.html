@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hintorando Store</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f4f4f9; }
+        #buy-btn { padding: 15px 30px; font-size: 1.2rem; cursor: pointer; background: #28a745; color: white; border: none; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1>Hintorando's Demo Shop</h1>
+    <p>Try out the Web Payment Handler API.</p>
+    <button id="buy-btn">Buy for $1.00</button>
+
+    <script>
+        // Register the Payment Handler on load
+        window.addEventListener('load', () => {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js');
+            }
+        });
+
+        document.getElementById('buy-btn').addEventListener('click', async () => {
+            const methodData = [{
+                supportedMethods: 'https://hintorando.github.io/pay/'
+            }];
+
+            const details = {
+                total: { label: 'Total Amount', amount: { currency: 'USD', value: '1.00' } }
+            };
+
+            try {
+                const request = new PaymentRequest(methodData, details);
+                const response = await request.show();
+                
+                // If we get here, the user clicked "Authorize" in the popup
+                alert('Success! Received Token: ' + response.details.token);
+                await response.complete('success');
+            } catch (err) {
+                console.error(err);
+                alert('Payment failed or was cancelled.');
+            }
+        });
+    </script>
+</body>
+</html>
